@@ -15,7 +15,7 @@ public class AbonnementService {
     @Autowired
     private AbonnementRepository abonnementRepository;
 
-    // Creer un abonnement
+   /* // Creer un abonnement
     public Abonnement creerAbonnement(Abonnement abonnement){
         abonnement.calculerDateFin();
         return abonnementRepository.save(abonnement);
@@ -41,5 +41,5 @@ public class AbonnementService {
     // Supprimer un abonnement
     public void supprimerAbonnement(Integer id){
         abonnementRepository.deleteById(id);
-    }
+    }*/
 }
