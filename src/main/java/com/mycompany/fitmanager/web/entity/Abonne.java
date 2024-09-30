@@ -1,17 +1,20 @@
 package com.mycompany.fitmanager.web.entity;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.mycompany.fitmanager.web.entity.enums.Genre;
-import com.mycompany.fitmanager.web.entity.enums.Statut;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
+import lombok.*;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
+@NoArgsConstructor
+@AllArgsConstructor
 @Entity
 public class Abonne {
 
@@ -22,12 +25,12 @@ public class Abonne {
     private Integer id;
 
     @NotNull
-    @Size(min = 2, max = 50)
+    @Size(max = 50)
     @Column(nullable = false)
     private String nom;
 
     @NotNull
-    @Size(min = 2, max = 50)
+    @Size(max = 50)
     @Column(nullable = false)
     private String prenom;
 
@@ -45,50 +48,25 @@ public class Abonne {
     @Column(nullable = false)
     private LocalDate dateInscription;
 
-    @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private Statut statutAbonnement; // Enum(Actif, Inactif) - Par défaut est Inactif et devient actif si l'abonné a pris un abonnement en cours de validité
+    private BigDecimal paiementTotal;
 
-    @Column(nullable = false)
-    private BigDecimal paiementTotal; // Par défaut Zero et s'additionne par le montant payé par l'abonné à chaque paiement
-
-    // Liste d'éléments liés à un Membre
     // Liste des abonnements d'un Membre
     @OneToMany(mappedBy = "abonne", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonManagedReference(value = "Abonne-abonnements")
     private List<Abonnement> abonnements = new ArrayList<>();
 
     // Liste des paiements d'un membre
     @OneToMany(mappedBy = "abonne", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonManagedReference(value = "Abonne-paiements")
     private List<Paiement> paiements = new ArrayList<>();
 
     // Liste des participations aux seances d'un membre
-    @OneToMany(mappedBy = "abonne", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "abonne", cascade = CascadeType.ALL)
     private List<Participation> participations = new ArrayList<>();
 
-    // Constructeurs
-    public Abonne() {
-    }
-    public Abonne(String nom, String prenom, Genre genre, String telephone) {
-        this.nom = nom;
-        this.prenom = prenom;
-        this.genre = genre;
-        this.telephone = telephone;
-        this.dateInscription = LocalDate.now();
-        this.statutAbonnement = Statut.Inactif;
-        this.paiementTotal = BigDecimal.ZERO;
-    }
-    public Abonne(String nom, String prenom, Genre genre, String telephone, String email) {
-        this.nom = nom;
-        this.prenom = prenom;
-        this.genre = genre;
-        this.telephone = telephone;
-        this.email = email;
-        this.dateInscription = LocalDate.now();
-        this.statutAbonnement = Statut.Inactif;
-        this.paiementTotal = BigDecimal.ZERO;
-    }
+   // Getters et Setters
 
-    // Getters et Setters
     public Integer getId() {
         return id;
     }
@@ -97,19 +75,19 @@ public class Abonne {
         this.id = id;
     }
 
-    public String getNom() {
+    public @NotNull @Size(max = 50) String getNom() {
         return nom;
     }
 
-    public void setNom(String nom) {
+    public void setNom(@NotNull @Size(max = 50) String nom) {
         this.nom = nom;
     }
 
-    public String getPrenom() {
+    public @NotNull @Size(max = 50) String getPrenom() {
         return prenom;
     }
 
-    public void setPrenom(String prenom) {
+    public void setPrenom(@NotNull @Size(max = 50) String prenom) {
         this.prenom = prenom;
     }
 
@@ -121,11 +99,11 @@ public class Abonne {
         this.genre = genre;
     }
 
-    public String getTelephone() {
+    public @NotNull @Pattern(regexp = "^((\\+223)?\\d{8})$", message = "Le numéro de téléphone doit comporter 8 chiffres ou être précédé de l'indicatif +223.") String getTelephone() {
         return telephone;
     }
 
-    public void setTelephone(String telephone) {
+    public void setTelephone(@NotNull @Pattern(regexp = "^((\\+223)?\\d{8})$", message = "Le numéro de téléphone doit comporter 8 chiffres ou être précédé de l'indicatif +223.") String telephone) {
         this.telephone = telephone;
     }
 
@@ -145,14 +123,6 @@ public class Abonne {
         this.dateInscription = dateInscription;
     }
 
-    public Statut getStatut() {
-        return statutAbonnement;
-    }
-
-    public void setStatut(Statut statut) {
-        this.statutAbonnement = statut;
-    }
-
     public BigDecimal getPaiementTotal() {
         return paiementTotal;
     }
@@ -165,36 +135,24 @@ public class Abonne {
         return abonnements;
     }
 
+    public void setAbonnements(List<Abonnement> abonnements) {
+        this.abonnements = abonnements;
+    }
+
     public List<Paiement> getPaiements() {
         return paiements;
+    }
+
+    public void setPaiements(List<Paiement> paiements) {
+        this.paiements = paiements;
     }
 
     public List<Participation> getParticipations() {
         return participations;
     }
 
-    // Méthodes Utilitaires
-    public Boolean isAbonnementActif(){
-        return this.statutAbonnement == Statut.Actif;
-    }
-
-    public void ajouterAbonnement(Abonnement abonnement){
-        abonnements.add(abonnement);
-        abonnement.setAbonne(this);
-    }
-
-    public void supprimerAbonnement(Abonnement abonnement){
-        abonnements.remove(abonnement);
-        abonnement.setAbonne(null);
-    }
-
-    public void ajouterPaiement(Paiement paiement){
-        paiements.add(paiement);
-        paiement.setAbonne(this);
-    }
-
-    public void supprimerAbonnement(Paiement paiement){
-        paiements.remove(paiement);
-        paiement.setAbonne(null);
+    public void setParticipations(List<Participation> participations) {
+        this.participations = participations;
     }
 }
+

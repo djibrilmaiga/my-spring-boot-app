@@ -1,9 +1,7 @@
 package com.mycompany.fitmanager.web.repository;
 
 import com.mycompany.fitmanager.web.entity.Categorie;
-import org.springframework.data.repository.CrudRepository;
-import org.springframework.stereotype.Repository;
+import org.springframework.data.jpa.repository.JpaRepository;
 
-@Repository
-public interface CategorieEquipementRepository extends CrudRepository<Categorie, Integer> {
+public interface CategorieRepository extends JpaRepository<Categorie, Integer> {
 }

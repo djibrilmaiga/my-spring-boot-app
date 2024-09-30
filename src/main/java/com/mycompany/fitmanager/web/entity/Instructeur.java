@@ -1,10 +1,17 @@
 package com.mycompany.fitmanager.web.entity;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
-import java.time.LocalDate;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
+import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
+
 import java.util.ArrayList;
 import java.util.List;
 
+@NoArgsConstructor
+@AllArgsConstructor
 @Entity
 public class Instructeur {
 
@@ -13,23 +20,27 @@ public class Instructeur {
     @Column(name = "instructeur_id")
     private Integer id;
 
+    @NotNull
+    @Size(max=50)
     @Column(nullable = false)
     private String nom;
 
+    @NotNull
+    @Size(max=50)
     @Column(nullable = false)
     private String prenom;
 
+    @NotNull
     @Column(nullable = false)
     private String telephone;
 
+    @NotNull
     @Column(nullable = false)
     private String specialite;
 
-    @Column(name = "date_embauche", nullable = false)
-    private LocalDate dateEmbauche;
-
     // Contient la liste des séances animées par un instructeur
-    @OneToMany(mappedBy = "instructeur", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "instructeur")
+    @JsonManagedReference(value = "Instructeur-seances")
     private List<Seance> seances = new ArrayList<>();
 
     // Getters et Setters
@@ -41,44 +52,43 @@ public class Instructeur {
         this.id = id;
     }
 
-    public String getNom() {
+    public @NotNull @Size(max = 50) String getNom() {
         return nom;
     }
 
-    public void setNom(String nom) {
+    public void setNom(@NotNull @Size(max = 50) String nom) {
         this.nom = nom;
     }
 
-    public String getPrenom() {
+    public @NotNull @Size(max = 50) String getPrenom() {
         return prenom;
     }
 
-    public void setPrenom(String prenom) {
+    public void setPrenom(@NotNull @Size(max = 50) String prenom) {
         this.prenom = prenom;
     }
 
-    public String getTelephone() {
+    public @NotNull String getTelephone() {
         return telephone;
     }
 
-    public void setTelephone(String telephone) {
+    public void setTelephone(@NotNull String telephone) {
         this.telephone = telephone;
     }
 
-    public String getSpecialite() {
+    public @NotNull String getSpecialite() {
         return specialite;
     }
 
-    public void setSpecialite(String specialite) {
+    public void setSpecialite(@NotNull String specialite) {
         this.specialite = specialite;
     }
 
-    public LocalDate getDateEmbauche() {
-        return dateEmbauche;
+    public List<Seance> getSeances() {
+        return seances;
     }
 
-    public void setDateEmbauche(LocalDate dateEmbauche) {
-        this.dateEmbauche = dateEmbauche;
+    public void setSeances(List<Seance> seances) {
+        this.seances = seances;
     }
-
 }

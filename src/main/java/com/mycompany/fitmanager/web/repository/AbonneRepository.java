@@ -1,23 +1,21 @@
 package com.mycompany.fitmanager.web.repository;
 
+import com.mycompany.fitmanager.web.dto.AbonneSansAbonnementDTO;
 import com.mycompany.fitmanager.web.entity.Abonne;
-import com.mycompany.fitmanager.web.entity.enums.Genre;
-import com.mycompany.fitmanager.web.entity.enums.Statut;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 
 import java.util.List;
-import java.util.Optional;
 
 public interface AbonneRepository extends JpaRepository<Abonne, Integer> {
-    // Rechercher un abonné par son téléphone
-    Optional<Abonne> findByTelephone(String telephone);
 
-    // Rechercher les abonnés par genre
-    List<Abonne> findByGenre(Genre genre);
+    @Query("SELECT COUNT(a) FROM Abonne a")
+    Integer totalAbonne();
 
-    // Rechercher tous les abonnés actifs
-    List<Abonne> findByStatutAbonnement(Statut statutAbonnement);
-
-    // Rechercher un abonné par nom et prénom
-    List<Abonne> findByNomAndPrenom(String nom, String prenom);
+    @Query("SELECT new com.mycompany.fitmanager.web.dto.AbonneSansAbonnementDTO(a.nom, a.prenom, a.telephone, MAX(ab.dateFin)) " +
+            "FROM Abonne a LEFT JOIN a.abonnements ab " +
+            "WHERE ab.statutAbonnement = 'Inactif' OR ab.dateFin < CURRENT_DATE " +
+            "GROUP BY a.id " +
+            "HAVING COUNT(ab) = (SELECT COUNT(ab2) FROM Abonnement ab2 WHERE ab2.abonne = a AND ab2.statutAbonnement = 'Inactif')")
+    List<AbonneSansAbonnementDTO> findAbonnesSansAbonnementActif();
 }

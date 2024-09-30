@@ -2,7 +2,12 @@ package com.mycompany.fitmanager.web.entity;
 
 import com.mycompany.fitmanager.web.entity.enums.RoleUser;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
+import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
 
+@NoArgsConstructor
+@AllArgsConstructor
 @Entity
 public class Utilisateur {
 
@@ -11,27 +16,20 @@ public class Utilisateur {
     @Column(name = "utilisateur_id")
     private Integer id;
 
+    @NotNull
     @Column(nullable = false, unique = true)
     private String login;
 
+    @NotNull
     @Column(nullable = false)
     private String password;
 
+    @NotNull
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private RoleUser role; // ADMIN ou MANAGER
 
-    // Constructeurs
-
-    public Utilisateur() {
-    }
-
-    public Utilisateur(String login, String password, RoleUser role) {
-        this.login = login;
-        this.password = password;
-        this.role = role;
-    }
-    //Getters et Setters
+    // Getters et Setters
 
     public Integer getId() {
         return id;
@@ -41,27 +39,33 @@ public class Utilisateur {
         this.id = id;
     }
 
-    public String getLogin() {
+    public @NotNull String getLogin() {
         return login;
     }
 
-    public void setLogin(String login) {
+    public void setLogin(@NotNull String login) {
         this.login = login;
     }
 
-    public String getPassword() {
+    public @NotNull String getPassword() {
         return password;
     }
 
-    public void setPassword(String password) {
+    public void setPassword(@NotNull String password) {
         this.password = password;
     }
 
-    public RoleUser getRole() {
+    public @NotNull RoleUser getRole() {
         return role;
     }
 
-    public void setRole(RoleUser role) {
+    public void setRole(@NotNull RoleUser role) {
         this.role = role;
     }
+
+   /* @Bean
+    public BCryptPasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder();
+    }*/
+
 }

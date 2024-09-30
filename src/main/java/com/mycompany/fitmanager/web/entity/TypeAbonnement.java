@@ -1,48 +1,36 @@
 package com.mycompany.fitmanager.web.entity;
 
-import com.mycompany.fitmanager.web.entity.enums.TypeService;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
+import lombok.*;
 
 import java.math.BigDecimal;
 
-
+@NoArgsConstructor
+@AllArgsConstructor
 @Entity
-public class Service {
+public class TypeAbonnement {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "service_id")
+    @Column(name = "type_abonnement_id")
     private Integer id;
 
-    @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
-    private TypeService typeService;
 
     @NotNull
     @Column(nullable = false)
-    private String nom;
-
-    @Column(columnDefinition = "TEXT")
-    private String description;
-
-    @NotNull
-    @Column(nullable = false)
-    private BigDecimal tarif;
+    private String libelle;
 
     @NotNull
     @Column(nullable = false)
     private Integer dureeJour;
 
-    // Constructeurs
-    public Service() {
-    }
+    @NotNull
+    @Column(nullable = false)
+    private BigDecimal tarif;
 
-    public Service(String nom, BigDecimal tarif, Integer dureeJour) {
-        this.nom = nom;
-        this.tarif = tarif;
-        this.dureeJour = dureeJour;
-    }
-    //Getters et Setters
+    @Column(columnDefinition = "TEXT")
+    private String description;
 
     public Integer getId() {
         return id;
@@ -52,20 +40,28 @@ public class Service {
         this.id = id;
     }
 
-    public TypeService getTypeService() {
-        return typeService;
+    public @NotNull String getLibelle() {
+        return libelle;
     }
 
-    public void setTypeService(TypeService typeService) {
-        this.typeService = typeService;
+    public void setLibelle(@NotNull String libelle) {
+        this.libelle = libelle;
     }
 
-    public String getNom() {
-        return nom;
+    public @NotNull Integer getDureeJour() {
+        return dureeJour;
     }
 
-    public void setNom(String nom) {
-        this.nom = nom;
+    public void setDureeJour(@NotNull Integer dureeJour) {
+        this.dureeJour = dureeJour;
+    }
+
+    public @NotNull BigDecimal getTarif() {
+        return tarif;
+    }
+
+    public void setTarif(@NotNull BigDecimal tarif) {
+        this.tarif = tarif;
     }
 
     public String getDescription() {
@@ -74,21 +70,5 @@ public class Service {
 
     public void setDescription(String description) {
         this.description = description;
-    }
-
-    public BigDecimal getTarif() {
-        return tarif;
-    }
-
-    public void setTarif(BigDecimal tarif) {
-        this.tarif = tarif;
-    }
-
-    public Integer getDureeJour() {
-        return dureeJour;
-    }
-
-    public void setDureeJour(Integer dureeJour) {
-        this.dureeJour = dureeJour;
     }
 }

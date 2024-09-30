@@ -1,23 +1,28 @@
 package com.mycompany.fitmanager.web.entity;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
 
 import java.util.ArrayList;
 import java.util.List;
 
+@NoArgsConstructor
+@AllArgsConstructor
 @Entity
-public class TypeEquipement {
+public class Categorie {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "type_equipement_id")
+    @Column(name = "categorie_id")
     private Integer id;
 
     @Column(name = "libelle", nullable = false)
     private String libelle;
 
-    // Contient la liste des équipements selon la catégorie d'équipement
-    @OneToMany(mappedBy = "typeEquipement", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "categorie")
+    @JsonManagedReference(value = "categorie-equipements")
     private List<Equipement> equipements = new ArrayList<>();
 
     // Getters et Setters
@@ -29,11 +34,19 @@ public class TypeEquipement {
         this.id = id;
     }
 
-    public String getLibelle() {
+    public  String getLibelle() {
         return libelle;
     }
 
-    public void setLibelle(String libelle) {
+    public void setLibelle( String libelle) {
         this.libelle = libelle;
+    }
+
+    public List<Equipement> getEquipements() {
+        return equipements;
+    }
+
+    public void setEquipements(List<Equipement> equipements) {
+        this.equipements = equipements;
     }
 }

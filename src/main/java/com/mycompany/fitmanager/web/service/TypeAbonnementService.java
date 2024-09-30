@@ -1,6 +1,8 @@
 package com.mycompany.fitmanager.web.service;
 
+import com.mycompany.fitmanager.web.dto.TypeAbonnementDTO;
 import com.mycompany.fitmanager.web.entity.TypeAbonnement;
+import com.mycompany.fitmanager.web.exception.ResourceNotFoundException;
 import com.mycompany.fitmanager.web.repository.TypeAbonnementRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -10,30 +12,45 @@ import java.util.List;
 
 @Service
 @Transactional
-public class ServiceService {
+public class TypeAbonnementService {
 
     @Autowired
     private TypeAbonnementRepository typeAbonnementRepository;
 
-    // Creer un service
-    public TypeAbonnement creerService(TypeAbonnement typeAbonnement) {
-        return typeAbonnementRepository.save(typeAbonnement);
+    // POST
+    public TypeAbonnement createTypeAbonnement(TypeAbonnement newTypeAbonnement) {
+        TypeAbonnement typeAbonnement = typeAbonnementRepository.save(newTypeAbonnement);
+        return typeAbonnement;
     }
-    // Obtenir un service
-    public TypeAbonnement obtenirServiceParId(Integer id){
-        return typeAbonnementRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Service non trouvé à l'id : " + id));
+    // GET ID
+    public TypeAbonnementDTO getTypeAbonnementById(Integer typeAbonnementId){
+        TypeAbonnementDTO typeAbonnement = typeAbonnementRepository.findTypeAbonnementById(typeAbonnementId);
+        return typeAbonnement;
     }
-    // Obtenir tous les services
-    public List<TypeAbonnement> obtenirTousLesServices() {
-        return typeAbonnementRepository.findAll();
+    // GET ALL
+    public List<TypeAbonnementDTO> getAllTypeAbonnement() {
+        List<TypeAbonnementDTO> typeAbonnements = typeAbonnementRepository.findAllType();
+        return typeAbonnements;
     }
-    // Mettre à jour un service
-    public TypeAbonnement modifierService(TypeAbonnement typeAbonnement){
-        return typeAbonnementRepository.save(typeAbonnement);
+
+    // PUT
+    public TypeAbonnement updateTypeAbonnement(Integer typeId, TypeAbonnement newTypeAbonnement){
+        TypeAbonnement LastTypeAbonnement = typeAbonnementRepository.findById(typeId)
+                .orElseThrow(() -> new ResourceNotFoundException("Service Abonnement non trouvé à l'id : " + typeId));
+
+        LastTypeAbonnement.setLibelle(newTypeAbonnement.getLibelle());
+        LastTypeAbonnement.setDureeJour(newTypeAbonnement.getDureeJour());
+        LastTypeAbonnement.setTarif(newTypeAbonnement.getTarif());
+        LastTypeAbonnement.setDescription(newTypeAbonnement.getDescription());
+
+        return typeAbonnementRepository.save(LastTypeAbonnement);
     }
-    // Supprimer un service
-    public void supprimerService(Integer id){
-        typeAbonnementRepository.deleteById(id);
+
+    // DELETE
+    public void deleteTypeAbonnement(Integer typeId){
+        TypeAbonnement typeAbonnement = typeAbonnementRepository.findById(typeId)
+                        .orElseThrow(() -> new ResourceNotFoundException("Service Abonnement non trouvé à l'id : " + typeId));
+
+        typeAbonnementRepository.deleteById(typeId);
     }
 }

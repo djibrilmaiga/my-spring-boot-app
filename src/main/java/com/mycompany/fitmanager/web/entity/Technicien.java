@@ -1,10 +1,18 @@
 package com.mycompany.fitmanager.web.entity;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
+import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
 
 import java.util.ArrayList;
 import java.util.List;
 
+
+@NoArgsConstructor
+@AllArgsConstructor
 @Entity
 public class Technicien {
 
@@ -13,20 +21,27 @@ public class Technicien {
     @Column(name = "technicien_id")
     private Integer id;
 
+    @NotNull
     @Column(nullable = false)
+    @Size(max = 50)
     private String nom;
 
+    @NotNull
+    @Size(max = 50)
     @Column(nullable = false)
     private String prenom;
 
+    @NotNull
+    @Size(max = 15)
     @Column(nullable = false)
     private String telephone;
 
-    // Contient la liste des dépannages effectués par un technicien
-    @OneToMany(mappedBy = "technicien", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "technicien")
+    @JsonManagedReference(value = "technicien-maintenances")
     private List<Maintenance> maintenances = new ArrayList<>();
 
     // Getters et Setters
+
     public Integer getId() {
         return id;
     }
@@ -35,27 +50,35 @@ public class Technicien {
         this.id = id;
     }
 
-    public String getNom() {
+    public @NotNull @Size(max = 50) String getNom() {
         return nom;
     }
 
-    public void setNom(String nom) {
+    public void setNom(@NotNull @Size(max = 50) String nom) {
         this.nom = nom;
     }
 
-    public String getPrenom() {
+    public @NotNull @Size(max = 50) String getPrenom() {
         return prenom;
     }
 
-    public void setPrenom(String prenom) {
+    public void setPrenom(@NotNull @Size(max = 50) String prenom) {
         this.prenom = prenom;
     }
 
-    public String getTelephone() {
+    public @NotNull @Size(max = 15) String getTelephone() {
         return telephone;
     }
 
-    public void setTelephone(String telephone) {
+    public void setTelephone(@NotNull @Size(max = 15) String telephone) {
         this.telephone = telephone;
+    }
+
+    public List<Maintenance> getMaintenances() {
+        return maintenances;
+    }
+
+    public void setMaintenances(List<Maintenance> maintenances) {
+        this.maintenances = maintenances;
     }
 }

@@ -1,9 +1,8 @@
 package com.mycompany.fitmanager.web.repository;
 
 import com.mycompany.fitmanager.web.entity.Technicien;
-import org.springframework.data.repository.CrudRepository;
-import org.springframework.stereotype.Repository;
+import org.springframework.data.jpa.repository.JpaRepository;
 
-@Repository
-public interface TechnicienRepository extends CrudRepository<Technicien,Integer> {
+public interface TechnicienRepository extends JpaRepository<Technicien,Integer> {
+
 }

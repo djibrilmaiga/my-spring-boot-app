@@ -1,7 +1,18 @@
 package com.mycompany.fitmanager.web.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
+import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
 
+import java.util.ArrayList;
+import java.util.List;
+
+
+@NoArgsConstructor
+@AllArgsConstructor
 @Entity
 public class Equipement {
 
@@ -10,19 +21,25 @@ public class Equipement {
     @Column(name = "equipement_id")
     private Integer id;
 
+    @NotNull
     @Column(nullable = false)
     private String nom;
 
+    @NotNull
     @Column(nullable = false)
     private Integer quantite;
 
-    private String photo;
+    @ManyToOne
+    @JoinColumn(name = "categorie_id")
+    @JsonBackReference(value = "categorie-equipements")
+    private Categorie categorie;
 
-    @ManyToOne (cascade = CascadeType.ALL)
-    @JoinColumn(name = "type_equipement_id")
-    private TypeEquipement typeEquipement;
+    @OneToMany (mappedBy = "equipement", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonManagedReference(value = "equipement-exemplaires")
+    private List<Exemplaire> exemplaires = new ArrayList<>();
 
     // Getters et Setters
+
     public Integer getId() {
         return id;
     }
@@ -31,35 +48,35 @@ public class Equipement {
         this.id = id;
     }
 
-    public String getNom() {
+    public @NotNull String getNom() {
         return nom;
     }
 
-    public void setNom(String nom) {
+    public void setNom(@NotNull String nom) {
         this.nom = nom;
     }
 
-    public Integer getQuantite() {
+    public @NotNull Integer getQuantite() {
         return quantite;
     }
 
-    public void setQuantite(Integer quantite) {
+    public void setQuantite(@NotNull Integer quantite) {
         this.quantite = quantite;
     }
 
-    public String getPhoto() {
-        return photo;
+    public Categorie getCategorie() {
+        return categorie;
     }
 
-    public void setPhoto(String photo) {
-        this.photo = photo;
+    public void setCategorie(Categorie categorie) {
+        this.categorie = categorie;
     }
 
-    public TypeEquipement getCategorieEquipement() {
-        return typeEquipement;
+    public List<Exemplaire> getExemplaires() {
+        return exemplaires;
     }
 
-    public void setCategorieEquipement(TypeEquipement typeEquipement) {
-        this.typeEquipement = typeEquipement;
+    public void setExemplaires(List<Exemplaire> exemplaires) {
+        this.exemplaires = exemplaires;
     }
 }
