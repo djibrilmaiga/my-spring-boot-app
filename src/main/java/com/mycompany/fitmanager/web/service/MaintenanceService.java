@@ -4,6 +4,7 @@ import com.mycompany.fitmanager.web.dto.MaintenanceDTO;
 import com.mycompany.fitmanager.web.entity.Exemplaire;
 import com.mycompany.fitmanager.web.entity.Maintenance;
 import com.mycompany.fitmanager.web.entity.Technicien;
+import com.mycompany.fitmanager.web.entity.enums.EtatEXemplaire;
 import com.mycompany.fitmanager.web.exception.ResourceNotFoundException;
 import com.mycompany.fitmanager.web.repository.ExemplaireRepository;
 import com.mycompany.fitmanager.web.repository.MaintenanceRepository;
@@ -41,6 +42,7 @@ public class MaintenanceService {
         newMaintenance.setExemplaire(exemplaire);
         newMaintenance.setTechnicien(technicien);
         exemplaire.setDateDernierMaintenance(newMaintenance.getDateDebut());
+        exemplaire.setEtat(EtatEXemplaire.Fonctionnel);
         exemplaireRepository.save(exemplaire);
 
         return maintenanceRepository.save(newMaintenance);
@@ -54,8 +56,9 @@ public class MaintenanceService {
 
     // GET ID
     public MaintenanceDTO getMaintenanceById(Integer id) {
-        Optional<Maintenance> maintenance = maintenanceRepository.findById(id);
-        return maintenance.map(this::mapToDTO).orElse(null);
+        Maintenance maintenance = maintenanceRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Maintenance introuvable à l'Id : " + id));
+        return mapToDTO(maintenance);
     }
 
     // PUT
@@ -95,10 +98,10 @@ public class MaintenanceService {
                 maintenance.getId(),
                 maintenance.getDateDebut(),
                 maintenance.getCout(),
+                maintenance.getRapport(), // Ajouter le rapport dans le champ description
                 maintenance.getTechnicien().getNom(),
                 maintenance.getTechnicien().getPrenom(),
                 maintenance.getExemplaire().getNumSerie(),
-                maintenance.getExemplaire().getDateDernierMaintenance(),
                 maintenance.getExemplaire().getEquipement().getNom()
         );
     }

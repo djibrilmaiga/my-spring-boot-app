@@ -3,56 +3,55 @@ package com.mycompany.fitmanager.web.service;
 import com.mycompany.fitmanager.web.entity.Utilisateur;
 import com.mycompany.fitmanager.web.exception.ResourceNotFoundException;
 import com.mycompany.fitmanager.web.repository.UtilisateurRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.w3c.dom.stylesheets.LinkStyle;
 
 import java.util.List;
 
 @Service
+@RequiredArgsConstructor
 public class UtilisateurService {
 
-    @Autowired
-    private UtilisateurRepository utilisateurRepository;
+    private final UtilisateurRepository utilisateurRepository;
 
-    //@Autowired
-   //private BCryptPasswordEncoder passwordEncoder;
-
-    // GET ALL
-    public List<Utilisateur> findAll() {
-        return utilisateurRepository.findAll();
-    }
-
-    // GET ID
-    public Utilisateur findById(Integer id) {
-        return utilisateurRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Utilisateur non trouvé à l'ID : " + id));
+    private PasswordEncoder passwordEncoder(){
+        return new BCryptPasswordEncoder();
     }
 
     // POST
-    public Utilisateur create(Utilisateur utilisateur) {
-       // utilisateur.setPassword(passwordEncoder.encode(utilisateur.getPassword())); // Hashing du mot de passe
+    public Utilisateur createUser(Utilisateur newUser){
+        String pwd = newUser.getPassword();
+        newUser.setPassword(passwordEncoder().encode(pwd));
+        return utilisateurRepository.save(newUser);
+    }
+
+    // GET ALL
+    public List<Utilisateur> getAllUsers(){
+        return utilisateurRepository.findAll();
+    }
+
+    public Utilisateur getUserById(Integer userId){
+        return utilisateurRepository.findById(userId)
+                .orElseThrow(() -> new ResourceNotFoundException("Utilisateur introuvable à l'id : " + userId));
+    }
+
+    // UPDATE
+    public Utilisateur updateUser (Integer userId, Utilisateur newUser){
+        Utilisateur utilisateur = utilisateurRepository.findById(userId).orElseThrow(() -> new ResourceNotFoundException("Utilisateur introuvable à l'id : " + userId));
+
+        utilisateur.setLogin(newUser.getLogin());
+        utilisateur.setPassword(passwordEncoder().encode(newUser.getPassword()));
+        utilisateur.setRole(newUser.getRole());
+
         return utilisateurRepository.save(utilisateur);
     }
 
-    // PUT
-    public Utilisateur update(Integer id, Utilisateur updatedUtilisateur) {
-        return utilisateurRepository.findById(id).map(utilisateur -> {
-            utilisateur.setLogin(updatedUtilisateur.getLogin());
-            utilisateur.setPassword(updatedUtilisateur.getPassword());
-            //utilisateur.setPassword(passwordEncoder.encode(updatedUtilisateur.getPassword())); // Update password
-            utilisateur.setRole(updatedUtilisateur.getRole());
-            return utilisateurRepository.save(utilisateur);
-        }).orElseThrow(() -> new RuntimeException("Utilisateur non trouvé"));
-    }
-
     // DELETE
-    public void deleteById(Integer id) {
-        utilisateurRepository.findById(id).orElseThrow(()-> new ResourceNotFoundException("Utilisateur introuvable à l'ID : " + id));
-        utilisateurRepository.deleteById(id);
+    public void deleteUserById (Integer userId){
+        utilisateurRepository.deleteById(userId);
     }
+    
 
-    public Boolean existsByLogin (String login){
-        return utilisateurRepository.existsByLogin(login);
-    }
 }

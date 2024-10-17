@@ -36,7 +36,10 @@ public class ParticipationController {
         return ResponseEntity.ok(abonneDTO);
     }
     // GET ID
-
+    @GetMapping("/taux-participation")
+    public double obtenirTauxParticipation() {
+        return participationService.calculerTauxParticipation();
+    }
 
     // PUT
     @PostMapping("{id}")

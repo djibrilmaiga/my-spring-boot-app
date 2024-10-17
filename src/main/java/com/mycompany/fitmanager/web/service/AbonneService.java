@@ -2,6 +2,7 @@ package com.mycompany.fitmanager.web.service;
 
 
 import com.mycompany.fitmanager.web.dto.AbonneSansAbonnementDTO;
+import com.mycompany.fitmanager.web.dto.AbonneSelectedDTO;
 import com.mycompany.fitmanager.web.entity.Abonne;
 import com.mycompany.fitmanager.web.exception.ResourceNotFoundException;
 import com.mycompany.fitmanager.web.repository.AbonneRepository;
@@ -39,6 +40,7 @@ public class AbonneService {
                 .orElseThrow(() -> new ResourceNotFoundException("Abonné non trouvé à l'id : "+abonneId ));
     }
 
+    // GET nombre total d'Abonnés
     public Integer getTotalAbonne(){
         return abonneRepository.totalAbonne();
     }
@@ -49,8 +51,14 @@ public class AbonneService {
         return abonnes;
     }
 
+    // GET ALL tous les Abonnés sans abonnement actif
     public List<AbonneSansAbonnementDTO> getAbonnesSansAbonnementActif() {
         return abonneRepository.findAbonnesSansAbonnementActif();
+    }
+
+    // GET ALL tous les abonnés avec nom, prénom et téléphone
+    public List<AbonneSelectedDTO> getAllAbonnesSelected(){
+        return abonneRepository.findAbonneSelected();
     }
 
     // PUT

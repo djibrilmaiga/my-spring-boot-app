@@ -15,11 +15,11 @@ public class ParticipationId implements Serializable {
     private Integer seanceId;
 
     // Getters et Setters
-    public Integer getMembreId() {
+    public Integer getAbonneId() {
         return abonneId;
     }
 
-    public void setMembreId(Integer membreId) {
+    public void setAbonneId(Integer membreId) {
         this.abonneId = membreId;
     }
 

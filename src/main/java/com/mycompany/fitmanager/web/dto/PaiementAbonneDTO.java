@@ -9,7 +9,7 @@ import java.time.LocalDate;
 
 public class PaiementAbonneDTO {
 
-    private Integer paiementId;
+    private Integer id;
     private TypePaiement typePaiement;
     private ModePaiement modePaiement;
     private LocalDate datePaiement;
@@ -23,9 +23,8 @@ public class PaiementAbonneDTO {
     private String prenomAbonne;
 
     // Constructors
-
     public PaiementAbonneDTO(Integer paiementId, TypePaiement typePaiement, ModePaiement modePaiement, LocalDate datePaiement, StatutPaiement statutPaiement, BigDecimal montantAPayer, BigDecimal montantPaye, BigDecimal montantRestant, String commentaire, Integer abonneId, String nomAbonne, String prenomAbonne) {
-        this.paiementId = paiementId;
+        this.id = paiementId;
         this.typePaiement = typePaiement;
         this.modePaiement = modePaiement;
         this.datePaiement = datePaiement;
@@ -41,12 +40,12 @@ public class PaiementAbonneDTO {
 
     // Getters et Setters
 
-    public Integer getPaiementId() {
-        return paiementId;
+    public Integer getId() {
+        return id;
     }
 
-    public void setPaiementId(Integer paiementId) {
-        this.paiementId = paiementId;
+    public void setId(Integer id) {
+        this.id = id;
     }
 
     public TypePaiement getTypePaiement() {

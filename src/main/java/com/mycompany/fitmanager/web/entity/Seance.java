@@ -13,9 +13,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
-@NoArgsConstructor
-@AllArgsConstructor
-@Entity
+@Entity @NoArgsConstructor @AllArgsConstructor
 public class Seance {
 
     @Id
@@ -44,15 +42,14 @@ public class Seance {
     @Column(nullable = false)
     private Integer dureeMinute;
 
-    @NotNull
     @Column(columnDefinition = "TEXT")
     private String description;
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private StatutCours statut;
+    private StatutCours statut; // Enum( Planifié, Terminé )
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne
     @JoinColumn(name = "instructeur_id")
     @JsonBackReference(value = "Instructeur-seances")
     private Instructeur instructeur;
@@ -112,11 +109,11 @@ public class Seance {
         this.dureeMinute = dureeMinute;
     }
 
-    public @NotNull String getDescription() {
+    public  String getDescription() {
         return description;
     }
 
-    public void setDescription(@NotNull String description) {
+    public void setDescription(String description) {
         this.description = description;
     }
 

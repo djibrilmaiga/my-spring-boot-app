@@ -38,6 +38,13 @@ public class EquipementService {
         return equipementRepository.findEquipementWithCategorie();
     }
 
+    // GET ID
+    public Equipement getEquipementById(Integer equipementId){
+        Equipement equipement = equipementRepository.findById(equipementId)
+                .orElseThrow(() -> new ResourceNotFoundException("Equipement introuvable à l'Id : " + equipementId));
+        return equipement;
+    }
+
     // PUT
     public Equipement updateEquipement(Integer id, Equipement newEquipement){
         Equipement equipement = equipementRepository.findById(id)

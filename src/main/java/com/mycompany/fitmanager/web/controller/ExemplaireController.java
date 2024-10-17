@@ -29,7 +29,7 @@ public class ExemplaireController {
 
     // GET ALL
     @GetMapping
-    public ResponseEntity<List<ExemplaireDTO>> getAllExempalire(){
+    public ResponseEntity<List<ExemplaireDTO>> getAllExemplaire(){
         List<ExemplaireDTO> exemplaires = exemplaireService.getAllExemplaire();
         return ResponseEntity.ok(exemplaires);
     }
@@ -39,6 +39,12 @@ public class ExemplaireController {
     public ResponseEntity<Exemplaire> getExemplaireById(@PathVariable("id") Integer exemplaireId){
         Exemplaire exemplaire = exemplaireService.getExemplaireById(exemplaireId);
         return ResponseEntity.ok(exemplaire);
+    }
+
+    // GET COUNT
+    @GetMapping("/en-panne")
+    public Integer getNombreExemplairesEnPanne() {
+        return exemplaireService.getCountExemplaireEnPanne();
     }
 
     // PUT

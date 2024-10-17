@@ -1,5 +1,6 @@
 package com.mycompany.fitmanager.web.controller;
 
+import com.mycompany.fitmanager.web.dto.CoachDTO;
 import com.mycompany.fitmanager.web.entity.Seance;
 import com.mycompany.fitmanager.web.service.SeanceService;
 import lombok.AllArgsConstructor;
@@ -20,14 +21,8 @@ public class SeanceController {
     private SeanceService seanceService;
 
     // POST
-    @PostMapping
-    public ResponseEntity<Seance> createSeance(@RequestBody Seance seance){
-        Seance savedSeance = seanceService.createSeance(seance);
-        return new ResponseEntity<>(savedSeance, HttpStatus.CREATED);
-    }
-
     @PostMapping("/instructeur/{instructeurId}")
-    public ResponseEntity<Seance> createSeancewithCoach(@PathVariable("instructeurId") Integer instructeurId,@RequestBody Seance seance){
+    public ResponseEntity<Seance> createSeancewithCoach(@PathVariable("instructeurId") Integer instructeurId, @RequestBody Seance seance){
         Seance savedSeance = seanceService.createSeanceSelectedCoach(instructeurId, seance);
         return new ResponseEntity<>(savedSeance, HttpStatus.CREATED);
     }
@@ -45,10 +40,27 @@ public class SeanceController {
         Seance seance = seanceService.getSeanceById(seanceId);
         return ResponseEntity.ok(seance);
     }
+
+    @GetMapping("/{seanceId}/instructeur")
+    public ResponseEntity<CoachDTO> getInstructeurBySeanceId(@PathVariable Integer seanceId) {
+        CoachDTO instructeurDTO = seanceService.getInstructeurBySeanceId(seanceId);
+        if (instructeurDTO == null) {
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok(instructeurDTO);
+    }
+
     // PUT
     @PutMapping("{id}")
     public ResponseEntity<Seance> updateSeance(@PathVariable("id") Integer seanceId, @RequestBody Seance newSeance){
         Seance seance = seanceService.updateSeance(seanceId, newSeance);
+        return ResponseEntity.ok(seance);
+    }
+
+    // PUT Inscrire des abonnés à un cours
+    @PutMapping("/inscrire/{id}")
+    public ResponseEntity<Seance> inscrireSeance(@PathVariable("id") Integer seanceId, @RequestBody Seance newSeance){
+        Seance seance = seanceService.inscrireCours(seanceId, newSeance);
         return ResponseEntity.ok(seance);
     }
 

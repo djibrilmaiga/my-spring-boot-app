@@ -1,6 +1,7 @@
 package com.mycompany.fitmanager.web.controller;
 
 import com.mycompany.fitmanager.web.dto.AbonneSansAbonnementDTO;
+import com.mycompany.fitmanager.web.dto.AbonneSelectedDTO;
 import com.mycompany.fitmanager.web.entity.Abonne;
 import com.mycompany.fitmanager.web.service.AbonneService;
 import lombok.AllArgsConstructor;
@@ -34,12 +35,21 @@ public class AbonneController {
         return ResponseEntity.ok(abonnes);
     }
 
+    // GET ALL Abonnés Sans Abonnement Actif
     @GetMapping("/sans-abonnement-actif")
     public ResponseEntity<List<AbonneSansAbonnementDTO>> getAbonnesSansAbonnementActif() {
         List<AbonneSansAbonnementDTO> abonnes = abonneService.getAbonnesSansAbonnementActif();
         return ResponseEntity.ok(abonnes);
     }
 
+    // GET ALL Abonnés (nom, prénom, téléphone)
+    @GetMapping("/abonnes-selected")
+    public ResponseEntity<List<AbonneSelectedDTO>> getAllAbonneSelected(){
+        List<AbonneSelectedDTO> abonnes = abonneService.getAllAbonnesSelected();
+        return ResponseEntity.ok(abonnes);
+    }
+
+    // GET Nombre d'Abonnés
     @GetMapping("/count")
     public Integer getTotalAbonne(){
         return abonneService.getTotalAbonne();

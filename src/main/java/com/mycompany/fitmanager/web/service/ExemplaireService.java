@@ -49,11 +49,16 @@ public class ExemplaireService {
                 .orElseThrow(() -> new ResourceNotFoundException("Exemplaire introuvable à l'Id :" + exemplaireId));
     }
 
+    // GET COUNT
+    public Integer getCountExemplaireEnPanne(){
+        return exemplaireRepository.countExemplairesEnPanne(EtatEXemplaire.En_panne);
+    }
+
     // PUT
     public Exemplaire updateExemplaire(Integer exemplaireId, Exemplaire newExemplaire){
         Exemplaire exemplaire = exemplaireRepository.findById(exemplaireId)
                 .orElseThrow(() -> new ResourceNotFoundException("Exemplaire introuvable à l'Id : " + exemplaireId));
-        exemplaire.setNumSerie(newExemplaire.getNumSerie());
+
         exemplaire.setEtat(newExemplaire.getEtat());
 
         return exemplaireRepository.save(exemplaire);

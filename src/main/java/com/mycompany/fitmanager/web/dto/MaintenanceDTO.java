@@ -8,21 +8,21 @@ public class MaintenanceDTO {
     private Integer maintenanceId;
     private LocalDate dateMaintenance;
     private BigDecimal coutMaintenance;
+    private String description;
     private String nomTechnicen;
     private String prenomTechnicien;
     private String numSerieExemplaire;
-    private LocalDate dateDernierMaintenance;
     private String nomEquipement;
 
     // Constructors
-    public MaintenanceDTO(Integer maintenanceId, LocalDate dateMaintenance, BigDecimal coutMaintenance, String nomTechnicen, String prenomTechnicien, String numSerieExemplaire, LocalDate dateDernierMaintenance, String nomEquipement) {
+    public MaintenanceDTO(Integer maintenanceId, LocalDate dateMaintenance, BigDecimal coutMaintenance, String description, String nomTechnicen, String prenomTechnicien, String numSerieExemplaire, String nomEquipement) {
         this.maintenanceId = maintenanceId;
         this.dateMaintenance = dateMaintenance;
         this.coutMaintenance = coutMaintenance;
+        this.description = description;
         this.nomTechnicen = nomTechnicen;
         this.prenomTechnicien = prenomTechnicien;
         this.numSerieExemplaire = numSerieExemplaire;
-        this.dateDernierMaintenance = dateDernierMaintenance;
         this.nomEquipement = nomEquipement;
     }
 
@@ -51,6 +51,14 @@ public class MaintenanceDTO {
         this.coutMaintenance = coutMaintenance;
     }
 
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
     public String getNomTechnicen() {
         return nomTechnicen;
     }
@@ -73,14 +81,6 @@ public class MaintenanceDTO {
 
     public void setNumSerieExemplaire(String numSerieExemplaire) {
         this.numSerieExemplaire = numSerieExemplaire;
-    }
-
-    public LocalDate getDateDernierMaintenance() {
-        return dateDernierMaintenance;
-    }
-
-    public void setDateDernierMaintenance(LocalDate dateDernierMaintenance) {
-        this.dateDernierMaintenance = dateDernierMaintenance;
     }
 
     public String getNomEquipement() {

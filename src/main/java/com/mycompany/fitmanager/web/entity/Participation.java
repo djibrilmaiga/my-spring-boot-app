@@ -3,29 +3,25 @@ package com.mycompany.fitmanager.web.entity;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.mycompany.fitmanager.web.entity.enums.StatutPresence;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 
-@NoArgsConstructor
-@AllArgsConstructor
-@Entity
+@Entity @AllArgsConstructor @NoArgsConstructor
 public class Participation {
 
     @EmbeddedId
     private ParticipationId id = new ParticipationId();
 
-    @NotNull
     @Enumerated(EnumType.STRING)
-    @Column(name = "statut", nullable = false)
-    private StatutPresence statut;
+    private StatutPresence statut; // Enum(Present, Absent)
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @MapsId("abonneId")
     @JoinColumn(name = "abonne_id")
+    @JsonBackReference(value = "abonne-participations")
     private Abonne abonne;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @MapsId("seanceId")
     @JoinColumn(name = "seance_id")
     @JsonBackReference(value = "seance-participations")
@@ -41,11 +37,11 @@ public class Participation {
         this.id = id;
     }
 
-    public @NotNull StatutPresence getStatut() {
+    public  StatutPresence getStatut() {
         return statut;
     }
 
-    public void setStatut(@NotNull StatutPresence statut) {
+    public void setStatut( StatutPresence statut) {
         this.statut = statut;
     }
 

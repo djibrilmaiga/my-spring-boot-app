@@ -24,8 +24,6 @@ public class Inscription {
     @Column(nullable = false)
     private BigDecimal tarif;
 
-    @NotNull
-    @Column(nullable = false)
     private String description;
 
     // Getters et Setters

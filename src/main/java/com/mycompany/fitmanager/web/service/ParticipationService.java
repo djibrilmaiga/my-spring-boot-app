@@ -65,4 +65,21 @@ public class ParticipationService {
                 .orElseThrow(() -> new ResourceNotFoundException("Participation introuvable à l'Id : " + participationId));
         participationRepository.deleteById(participationId);
     }
+
+    public double calculerTauxParticipation() {
+        List<Participation> participations = participationRepository.findAll();
+
+        int nombreTotalParticipations = participations.size();
+        int nombreTotalSeances = participations.stream()
+                .map(p -> p.getSeance().getId())
+                .distinct()
+                .mapToInt(seanceId -> 1)
+                .sum(); // Compter le nombre unique de séances
+
+        if (nombreTotalSeances == 0) {
+            return 0; // Éviter la division par zéro
+        }
+
+        return (double) nombreTotalParticipations / nombreTotalSeances * 100;
+    }
 }

@@ -13,9 +13,7 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
-@NoArgsConstructor
-@AllArgsConstructor
-@Entity
+@Entity @AllArgsConstructor @NoArgsConstructor
 public class Abonne {
 
     // Propriétés
@@ -36,7 +34,7 @@ public class Abonne {
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private Genre genre; // Enum(Homme, Femme, Autre)
+    private Genre genre; // Enum(Homme, Femme)
 
     @NotNull
     @Pattern(regexp = "^((\\+223)?\\d{8})$", message = "Le numéro de téléphone doit comporter 8 chiffres ou être précédé de l'indicatif +223.")
@@ -63,6 +61,7 @@ public class Abonne {
 
     // Liste des participations aux seances d'un membre
     @OneToMany(mappedBy = "abonne", cascade = CascadeType.ALL)
+    @JsonManagedReference(value = "abonne-participations")
     private List<Participation> participations = new ArrayList<>();
 
    // Getters et Setters

@@ -34,6 +34,13 @@ public class EquipementController {
         return ResponseEntity.ok(equipements);
     }
 
+    // GET ID
+    @GetMapping("{id}")
+    public ResponseEntity<Equipement> getEquipementByID(@PathVariable("id") Integer equipementId){
+        Equipement equipement = equipementService.getEquipementById(equipementId);
+        return ResponseEntity.ok(equipement);
+    }
+
     // PUT
     @PutMapping("{id}")
     public ResponseEntity<Equipement> updateEquipement(@PathVariable("id") Integer equipementId,@RequestBody Equipement newEquipement){

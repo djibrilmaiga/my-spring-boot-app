@@ -5,6 +5,7 @@ import com.mycompany.fitmanager.web.dto.PaiementParModeDTO;
 import com.mycompany.fitmanager.web.entity.Paiement;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -16,6 +17,10 @@ public interface PaiementRepository extends JpaRepository<Paiement, Integer> {
     @Query("SELECT new com.mycompany.fitmanager.web.dto.PaiementAbonneDTO(p.id, p.typePaiement, p.modePaiement, p.datePaiement, p.statutPaiement, p.montantAPayer, p.montantPaye, p.montantRestant, p.commentaire, a.id, a.nom, a.prenom) " +
             "FROM Paiement p JOIN p.abonne a")
     List<PaiementAbonneDTO> findAllPaiementsWithAbonneInfo();
+
+    @Query("SELECT new com.mycompany.fitmanager.web.dto.PaiementAbonneDTO(p.id, p.typePaiement, p.modePaiement, p.datePaiement, p.statutPaiement, p.montantAPayer, p.montantPaye, p.montantRestant, p.commentaire, a.id, a.nom, a.prenom) " +
+            "FROM Paiement p JOIN p.abonne a WHERE p.id = :id")
+    PaiementAbonneDTO findPaiementAbonneById(Integer id);
 
     @Query("SELECT SUM(p.montantPaye) FROM Paiement p WHERE YEAR(p.datePaiement) = :year AND MONTH(p.datePaiement) = :month")
     BigDecimal sumPaymentsByMonth(int year, int month);

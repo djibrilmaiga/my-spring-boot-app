@@ -23,18 +23,13 @@ public class PaiementController {
 
     // POST
     @PostMapping("/abonne/{abonneId}")
-    public ResponseEntity<Paiement> createAbonne(@PathVariable Integer abonneId,@RequestBody Paiement paiement){
-        Paiement savedPaiement = paiementService.createAbonne(abonneId, paiement);
+    public ResponseEntity<Paiement> createPaiement(@PathVariable Integer abonneId,@RequestBody Paiement paiement){
+        Paiement savedPaiement = paiementService.createPaiement(abonneId, paiement);
         return new ResponseEntity<>(paiement, HttpStatus.CREATED);
     }
 
     // GET ALL
     @GetMapping
-    public ResponseEntity<List<Paiement>> getAllPaiement(){
-        List<Paiement> paiements = paiementService.getAllPaiement();
-        return ResponseEntity.ok(paiements);
-    }
-    @GetMapping("/details-abonne")
     public ResponseEntity<List<PaiementAbonneDTO>> getAllPaiementsWithAbonneInfo(){
         List<PaiementAbonneDTO> paiements = paiementService.getAllPaiementWithAbonneInfo();
         return ResponseEntity.ok(paiements);
@@ -47,11 +42,19 @@ public class PaiementController {
         return ResponseEntity.ok(paiement);
     }
 
+    @GetMapping("/paiement-abonne/{id}")
+    public ResponseEntity<PaiementAbonneDTO> getPaiementAbonneById(@PathVariable("id") Integer paiementId){
+        PaiementAbonneDTO paiement = paiementService.getPaiementAbonneById(paiementId);
+        return ResponseEntity.ok(paiement);
+    }
+
+    // GET MONTANT TOTAL PAR MOIS
     @GetMapping("/somme")
     public BigDecimal getSommePaiements(@RequestParam Integer year, @RequestParam Integer month){
         return paiementService.getSommePaiementsByMonth(year, month);
     }
 
+    // GET PAIEMENTS PAR MODE
     @GetMapping("/repartition")
     public List<PaiementParModeDTO> getRepartitionPaiementsParMode(){
         return paiementService.getTotalPaiementsByModePaiement();

@@ -1,71 +1,76 @@
 package com.mycompany.fitmanager.web.entity;
 
-import com.mycompany.fitmanager.web.entity.enums.RoleUser;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
+import java.util.Collection;
+import java.util.List;
+
+@Data
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-public class Utilisateur {
+public class Utilisateur implements UserDetails {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "utilisateur_id")
     private Integer id;
 
-    @NotNull
-    @Column(nullable = false, unique = true)
+    @Column(unique = true, nullable = false)
     private String login;
 
-    @NotNull
     @Column(nullable = false)
     private String password;
 
-    @NotNull
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private RoleUser role; // ADMIN ou MANAGER
+    private RoleUser role;
 
-    // Getters et Setters
-
-    public Integer getId() {
-        return id;
+    public enum RoleUser {
+        ADMIN,
+        MANAGER;
     }
 
-    public void setId(Integer id) {
-        this.id = id;
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return List.of(new SimpleGrantedAuthority(role.name()));
     }
 
-    public @NotNull String getLogin() {
-        return login;
-    }
-
-    public void setLogin(@NotNull String login) {
-        this.login = login;
-    }
-
-    public @NotNull String getPassword() {
+    @Override
+    public String getPassword() {
         return password;
     }
 
-    public void setPassword(@NotNull String password) {
-        this.password = password;
+    @Override
+    public String getUsername() { // Méthode pour renvoyer le login
+        return login;
     }
 
-    public @NotNull RoleUser getRole() {
-        return role;
+    @Override
+    public boolean isAccountNonExpired() {
+        return true;
     }
 
-    public void setRole(@NotNull RoleUser role) {
-        this.role = role;
+    @Override
+    public boolean isAccountNonLocked() {
+        return true;
     }
 
-   /* @Bean
-    public BCryptPasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder();
-    }*/
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return true;
+    }
 
+    @Override
+    public boolean isEnabled() {
+        return true;
+    }
 }

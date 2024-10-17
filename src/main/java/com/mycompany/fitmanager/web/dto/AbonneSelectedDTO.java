@@ -1,21 +1,18 @@
 package com.mycompany.fitmanager.web.dto;
 
-import java.time.LocalDate;
+public class AbonneSelectedDTO {
 
-public class AbonneSansAbonnementDTO {
     private Integer id;
     private String nom;
     private String prenom;
     private String telephone;
-    private LocalDate derniereDateFinAbonnement;
 
-    // Constructeurs
-    public AbonneSansAbonnementDTO(Integer id, String nom, String prenom, String telephone, LocalDate derniereDateFinAbonnement) {
+    // Constructors
+    public AbonneSelectedDTO(Integer id, String nom, String prenom, String telephone) {
         this.id = id;
         this.nom = nom;
         this.prenom = prenom;
         this.telephone = telephone;
-        this.derniereDateFinAbonnement = derniereDateFinAbonnement;
     }
 
     // Getters et Setters
@@ -50,13 +47,4 @@ public class AbonneSansAbonnementDTO {
     public void setTelephone(String telephone) {
         this.telephone = telephone;
     }
-
-    public LocalDate getDerniereDateFinAbonnement() {
-        return derniereDateFinAbonnement;
-    }
-
-    public void setDerniereDateFinAbonnement(LocalDate derniereDateFinAbonnement) {
-        this.derniereDateFinAbonnement = derniereDateFinAbonnement;
-    }
 }
-

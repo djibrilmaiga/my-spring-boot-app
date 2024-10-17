@@ -1,6 +1,5 @@
 package com.mycompany.fitmanager.web.repository;
 
-import com.mycompany.fitmanager.web.dto.MaintenanceDTO;
 import com.mycompany.fitmanager.web.entity.Maintenance;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
