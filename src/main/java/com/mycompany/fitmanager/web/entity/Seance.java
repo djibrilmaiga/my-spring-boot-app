@@ -7,15 +7,17 @@ import com.mycompany.fitmanager.web.entity.enums.TypeSeance;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
-@Entity @NoArgsConstructor @AllArgsConstructor
+@Entity @NoArgsConstructor @AllArgsConstructor @Getter @Setter
 public class Seance {
-
+    // Propriétés
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "seance_id")
@@ -55,90 +57,8 @@ public class Seance {
     private Instructeur instructeur;
 
     // Contient la liste des membres inscrits à une seance
-    @OneToMany(mappedBy = "seance", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "seance", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
     @JsonManagedReference(value = "seance-participations")
     private List<Participation> participations = new ArrayList<>();
 
-    // Getters et Setters
-
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
-    }
-
-    public @NotNull String getTitre() {
-        return titre;
-    }
-
-    public void setTitre(@NotNull String titre) {
-        this.titre = titre;
-    }
-
-    public @NotNull TypeSeance getTypeSeance() {
-        return typeSeance;
-    }
-
-    public void setTypeSeance(@NotNull TypeSeance typeSeance) {
-        this.typeSeance = typeSeance;
-    }
-
-    public @NotNull Integer getNbreParticipants() {
-        return nbreParticipants;
-    }
-
-    public void setNbreParticipants(@NotNull Integer nbreParticipants) {
-        this.nbreParticipants = nbreParticipants;
-    }
-
-    public @NotNull LocalDateTime getDateHeure() {
-        return dateHeure;
-    }
-
-    public void setDateHeure(@NotNull LocalDateTime dateHeure) {
-        this.dateHeure = dateHeure;
-    }
-
-    public @NotNull Integer getDureeMinute() {
-        return dureeMinute;
-    }
-
-    public void setDureeMinute(@NotNull Integer dureeMinute) {
-        this.dureeMinute = dureeMinute;
-    }
-
-    public  String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
-    public StatutCours getStatut() {
-        return statut;
-    }
-
-    public void setStatut(StatutCours statut) {
-        this.statut = statut;
-    }
-
-    public Instructeur getInstructeur() {
-        return instructeur;
-    }
-
-    public void setInstructeur(Instructeur instructeur) {
-        this.instructeur = instructeur;
-    }
-
-    public List<Participation> getParticipations() {
-        return participations;
-    }
-
-    public void setParticipations(List<Participation> participations) {
-        this.participations = participations;
-    }
 }
-

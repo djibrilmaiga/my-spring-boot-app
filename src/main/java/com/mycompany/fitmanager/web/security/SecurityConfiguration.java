@@ -31,6 +31,7 @@ public class SecurityConfiguration {
                 .csrf(AbstractHttpConfigurer::disable) // Désactive la protection CSRF car l'application utilise des tokens JWT qui ne nécessitent pas de protection CSRF.
                 .cors(cors -> cors.configurationSource(getCorsConfigurationSource())) // Configure la gestion CORS.
                 .authorizeHttpRequests(auth -> auth
+                        .requestMatchers("/", "/index.html", "/static/**", "/css/**", "/js/**", "/images/**", "/favicon.ico").permitAll() // Autoriser les accès aux fichiers statiques et à l'index
                         .requestMatchers("/api/auth/**").permitAll() // Permet l'accès non authentifié aux routes d'authentification (par exemple : login, inscription).
                         .requestMatchers("/api/admin").hasRole("ADMIN") // Restreint l'accès à cette route aux utilisateurs avec le rôle ADMIN uniquement.
                         .requestMatchers("/api/manager").hasRole("MANAGER") // Restreint l'accès à cette route aux utilisateurs avec le rôle MANAGER uniquement.

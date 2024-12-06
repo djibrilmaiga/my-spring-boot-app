@@ -11,8 +11,6 @@ import java.math.BigDecimal;
 import java.util.List;
 
 public interface PaiementRepository extends JpaRepository<Paiement, Integer> {
-    // Trouver tous les paiements liés à un abonné
-    List<Paiement> findByAbonneId(Integer abonneId);
 
     @Query("SELECT new com.mycompany.fitmanager.web.dto.PaiementAbonneDTO(p.id, p.typePaiement, p.modePaiement, p.datePaiement, p.statutPaiement, p.montantAPayer, p.montantPaye, p.montantRestant, p.commentaire, a.id, a.nom, a.prenom) " +
             "FROM Paiement p JOIN p.abonne a")

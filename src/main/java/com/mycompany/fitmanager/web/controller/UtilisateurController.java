@@ -14,9 +14,10 @@ import java.util.List;
 @RequestMapping("/api/utilisateur")
 @RequiredArgsConstructor
 public class UtilisateurController {
-
+    // Propriétés
     private final UtilisateurService utilisateurService;
 
+    // ---Méthodes REST
     // POST
     @PostMapping
     public ResponseEntity<Utilisateur> createUser(@RequestBody Utilisateur utilisateur){
@@ -40,7 +41,8 @@ public class UtilisateurController {
 
     // PUT
     @PutMapping("{id}")
-    public ResponseEntity<Utilisateur> updateUser(@PathVariable("id") Integer userId, @RequestBody Utilisateur newUser){
+    public ResponseEntity<Utilisateur> updateUser(@PathVariable("id") Integer userId,
+                                                  @RequestBody Utilisateur newUser){
         Utilisateur user = utilisateurService.updateUser(userId, newUser);
         return ResponseEntity.ok(user);
     }

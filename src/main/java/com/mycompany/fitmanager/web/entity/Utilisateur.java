@@ -1,10 +1,7 @@
 package com.mycompany.fitmanager.web.entity;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -12,33 +9,30 @@ import org.springframework.security.core.userdetails.UserDetails;
 import java.util.Collection;
 import java.util.List;
 
-@Data
-@Builder
-@NoArgsConstructor
-@AllArgsConstructor
-@Entity
+@Data @Builder @NoArgsConstructor @AllArgsConstructor @Entity
 public class Utilisateur implements UserDetails {
-
+    // Propriétés
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "utilisateur_id")
+    @GeneratedValue(strategy = GenerationType.IDENTITY) // Cette propriété est AUTO INCREMENT dans la Database
+    @Column(name = "utilisateur_id") // Nom du champ dans la database
     private Integer id;
 
-    @Column(unique = true, nullable = false)
+    @Column(unique = true, nullable = false) //  Champ dans la database est UNIQUE et NOT NULL
     private String login;
 
     @Column(nullable = false)
     private String password;
 
-    @Enumerated(EnumType.STRING)
+    @Enumerated(EnumType.STRING) // le champ est un ENUM dans la database
     @Column(nullable = false)
     private RoleUser role;
 
+    // Classe Enum RoleUser
     public enum RoleUser {
-        ADMIN,
-        MANAGER;
+        ADMIN, MANAGER;
     }
 
+    // Méthodes
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return List.of(new SimpleGrantedAuthority(role.name()));

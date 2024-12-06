@@ -22,22 +22,23 @@ public class TechnicienController {
     // POST
     @PostMapping
     public ResponseEntity<Technicien> createTechnicien(@RequestBody Technicien technicien){
-        Technicien savedTechnicen = technicienService.createTechnicien(technicien);
+        Technicien savedTechnicen = technicienService.save(technicien);
         return new ResponseEntity<>(savedTechnicen, HttpStatus.CREATED);
     }
 
     // GET ALL
     @GetMapping
     public ResponseEntity<List<Technicien>> getAllTechniciens(){
-        List<Technicien> techniciens = technicienService.getAllTechnicien();
+        List<Technicien> techniciens = technicienService.findAll();
         return ResponseEntity.ok(techniciens);
     }
 
     // GET
     @GetMapping("{id}")
     public ResponseEntity<Technicien> getTechnicienById(@PathVariable("id") Integer technicienId){
-        Technicien technicien = technicienService.getTechnicienById(technicienId);
-        return ResponseEntity.ok(technicien);
+        return technicienService.findById(technicienId)
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
     }
 
     // PUT
@@ -50,7 +51,7 @@ public class TechnicienController {
     // DELETE
     @DeleteMapping("{id}")
     public ResponseEntity<String> deleteTechnicien(@PathVariable("id") Integer technicienId){
-        technicienService.deleteTechnicien(technicienId);
+        technicienService.deleteById(technicienId);
         return ResponseEntity.ok("Technicien supprimé avec succès !");
     }
 }

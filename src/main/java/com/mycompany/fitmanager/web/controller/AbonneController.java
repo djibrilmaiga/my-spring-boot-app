@@ -2,6 +2,7 @@ package com.mycompany.fitmanager.web.controller;
 
 import com.mycompany.fitmanager.web.dto.AbonneSansAbonnementDTO;
 import com.mycompany.fitmanager.web.dto.AbonneSelectedDTO;
+import com.mycompany.fitmanager.web.dto.AbonneSuscribeDTO;
 import com.mycompany.fitmanager.web.entity.Abonne;
 import com.mycompany.fitmanager.web.service.AbonneService;
 import lombok.AllArgsConstructor;
@@ -23,7 +24,7 @@ public class AbonneController {
 
     // POST
     @PostMapping
-    public ResponseEntity<Abonne> createAbonne(@RequestBody Abonne abonne){
+    public ResponseEntity<Abonne> createAbonne(@RequestBody AbonneSuscribeDTO abonne){
         Abonne savedAbonne = abonneService.createAbonne(abonne);
         return new ResponseEntity<>(savedAbonne, HttpStatus.CREATED);
     }

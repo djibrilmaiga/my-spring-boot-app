@@ -5,7 +5,6 @@ import com.mycompany.fitmanager.web.entity.enums.Genre;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
-import jakarta.validation.constraints.Size;
 import lombok.*;
 
 import java.math.BigDecimal;
@@ -13,35 +12,37 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
-@Entity @AllArgsConstructor @NoArgsConstructor
+@NoArgsConstructor // Constructeur sans arguments
+@AllArgsConstructor // Constructeur avec tous les arguments
+@Getter // Génère automatiquement les Getters
+@Setter // Génère automatiquement les Setters
+@Entity // Annotation Bean tenue compte dans le Contexte de Spring - Inversion de contrôle (IoC)
 public class Abonne {
-
     // Propriétés
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "abonne_id")
+    @GeneratedValue(strategy = GenerationType.IDENTITY) // ID est AUTO INCREMENT dans la Base de Données
+    @Column(name = "abonne_id") // Correspondance du nom de Champs dans la BD
     private Integer id;
 
-    @NotNull
-    @Size(max = 50)
+    @NotNull // Validator pour dire qua la propriété est Non Null
     @Column(nullable = false)
     private String nom;
 
     @NotNull
-    @Size(max = 50)
     @Column(nullable = false)
     private String prenom;
 
-    @Enumerated(EnumType.STRING)
+    @Enumerated(EnumType.STRING) // Dans la BD, le type est un Enum
     @Column(nullable = false)
     private Genre genre; // Enum(Homme, Femme)
 
     @NotNull
-    @Pattern(regexp = "^((\\+223)?\\d{8})$", message = "Le numéro de téléphone doit comporter 8 chiffres ou être précédé de l'indicatif +223.")
+    @Pattern(regexp = "^((\\+223)?\\d{8})$",
+            message = "Le numéro de téléphone doit comporter 8 chiffres ou être précédé de l'indicatif +223.")
     @Column(nullable = false, unique = true)
     private String telephone;
 
-    private String email;
+    private String email; // Noter que l'email peut être NULL
 
     @Column(nullable = false)
     private LocalDate dateInscription;
@@ -50,54 +51,21 @@ public class Abonne {
     private BigDecimal paiementTotal;
 
     // Liste des abonnements d'un Membre
-    @OneToMany(mappedBy = "abonne", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "abonne", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
     @JsonManagedReference(value = "Abonne-abonnements")
     private List<Abonnement> abonnements = new ArrayList<>();
 
     // Liste des paiements d'un membre
-    @OneToMany(mappedBy = "abonne", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "abonne", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
     @JsonManagedReference(value = "Abonne-paiements")
     private List<Paiement> paiements = new ArrayList<>();
 
     // Liste des participations aux seances d'un membre
-    @OneToMany(mappedBy = "abonne", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "abonne", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JsonManagedReference(value = "abonne-participations")
     private List<Participation> participations = new ArrayList<>();
 
    // Getters et Setters
-
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
-    }
-
-    public @NotNull @Size(max = 50) String getNom() {
-        return nom;
-    }
-
-    public void setNom(@NotNull @Size(max = 50) String nom) {
-        this.nom = nom;
-    }
-
-    public @NotNull @Size(max = 50) String getPrenom() {
-        return prenom;
-    }
-
-    public void setPrenom(@NotNull @Size(max = 50) String prenom) {
-        this.prenom = prenom;
-    }
-
-    public Genre getGenre() {
-        return genre;
-    }
-
-    public void setGenre(Genre genre) {
-        this.genre = genre;
-    }
-
     public @NotNull @Pattern(regexp = "^((\\+223)?\\d{8})$", message = "Le numéro de téléphone doit comporter 8 chiffres ou être précédé de l'indicatif +223.") String getTelephone() {
         return telephone;
     }
@@ -106,52 +74,4 @@ public class Abonne {
         this.telephone = telephone;
     }
 
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public LocalDate getDateInscription() {
-        return dateInscription;
-    }
-
-    public void setDateInscription(LocalDate dateInscription) {
-        this.dateInscription = dateInscription;
-    }
-
-    public BigDecimal getPaiementTotal() {
-        return paiementTotal;
-    }
-
-    public void setPaiementTotal(BigDecimal paiementTotal) {
-        this.paiementTotal = paiementTotal;
-    }
-
-    public List<Abonnement> getAbonnements() {
-        return abonnements;
-    }
-
-    public void setAbonnements(List<Abonnement> abonnements) {
-        this.abonnements = abonnements;
-    }
-
-    public List<Paiement> getPaiements() {
-        return paiements;
-    }
-
-    public void setPaiements(List<Paiement> paiements) {
-        this.paiements = paiements;
-    }
-
-    public List<Participation> getParticipations() {
-        return participations;
-    }
-
-    public void setParticipations(List<Participation> participations) {
-        this.participations = participations;
-    }
 }
-

@@ -5,17 +5,20 @@ import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.util.ArrayList;
 import java.util.List;
 
-
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
+@Getter
+@Setter
 public class Equipement {
-
+    // Propriétés
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "equipement_id")
@@ -34,49 +37,7 @@ public class Equipement {
     @JsonBackReference(value = "categorie-equipements")
     private Categorie categorie;
 
-    @OneToMany (mappedBy = "equipement", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany (mappedBy = "equipement", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
     @JsonManagedReference(value = "equipement-exemplaires")
     private List<Exemplaire> exemplaires = new ArrayList<>();
-
-    // Getters et Setters
-
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
-    }
-
-    public @NotNull String getNom() {
-        return nom;
-    }
-
-    public void setNom(@NotNull String nom) {
-        this.nom = nom;
-    }
-
-    public @NotNull Integer getQuantite() {
-        return quantite;
-    }
-
-    public void setQuantite(@NotNull Integer quantite) {
-        this.quantite = quantite;
-    }
-
-    public Categorie getCategorie() {
-        return categorie;
-    }
-
-    public void setCategorie(Categorie categorie) {
-        this.categorie = categorie;
-    }
-
-    public List<Exemplaire> getExemplaires() {
-        return exemplaires;
-    }
-
-    public void setExemplaires(List<Exemplaire> exemplaires) {
-        this.exemplaires = exemplaires;
-    }
 }

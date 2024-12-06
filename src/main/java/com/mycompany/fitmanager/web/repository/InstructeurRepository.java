@@ -1,8 +1,8 @@
 package com.mycompany.fitmanager.web.repository;
 
 import com.mycompany.fitmanager.web.entity.Instructeur;
-import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
 
-
-public interface InstructeurRepository extends JpaRepository<Instructeur, Integer> {
+@Repository
+public interface InstructeurRepository extends AgentRepository<Instructeur> {
 }

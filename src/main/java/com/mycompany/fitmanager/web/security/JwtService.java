@@ -51,14 +51,17 @@ public class JwtService {
         // Récupérer l'utilisateur authentifié
         Utilisateur user = (Utilisateur) authentication.getPrincipal();
         String username = user.getUsername();
+        Integer userId = user.getId();
         // Récupérer les rôles de l'utilisateur
         String roles = user.getAuthorities().stream()
                 .map(GrantedAuthority::getAuthority)
                 .collect(Collectors.joining(","));
+
         Algorithm algorithm = Algorithm.HMAC256(JWT_SECRET);
 
         return JWT.create()
                 .withSubject(username)
+                .withClaim("userId", userId)
                 .withClaim("roles", roles)
                 .withIssuedAt(new Date(System.currentTimeMillis()))
                 .withExpiresAt(new Date(System.currentTimeMillis() + JWT_EXPIRATION))
@@ -118,5 +121,10 @@ public class JwtService {
         byte[] keyBytes = Decoders.BASE64.decode(JWT_SECRET);
         return Keys.hmacShaKeyFor(keyBytes);
     }
+
+    public Integer extractUserId(String token) {
+        return extractClaim(token, decodedJWT -> decodedJWT.getClaim("userId").asInt());
+    }
+
 
 }

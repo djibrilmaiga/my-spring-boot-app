@@ -2,15 +2,16 @@ package com.mycompany.fitmanager.web.service;
 
 import com.mycompany.fitmanager.web.dto.InscriptionDTO;
 import com.mycompany.fitmanager.web.entity.Inscription;
+import com.mycompany.fitmanager.web.entity.Utilisateur;
 import com.mycompany.fitmanager.web.exception.ResourceNotFoundException;
 import com.mycompany.fitmanager.web.repository.InscriptionRepository;
+import com.mycompany.fitmanager.web.repository.UtilisateurRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 @AllArgsConstructor
@@ -20,8 +21,17 @@ public class InscriptionService {
     @Autowired
     private InscriptionRepository inscriptionRepository;
 
+    @Autowired
+    private UtilisateurRepository utilisateurRepository;
+
     // POST
-    public Inscription createInscription(Inscription newInscription){
+    public Inscription createInscription(Integer userId, Inscription newInscription){
+        // Récuperer l'utilisateur qui crée l'inscription
+        Utilisateur user = utilisateurRepository.findById(userId)
+                .orElseThrow(() -> new ResourceNotFoundException("Utilisateur non trouvé à l'ID: "+ userId));
+        // Affectation de l'utilisateur à l'entité Inscription en cours...
+        newInscription.setUtilisateur(user);
+        // Enregistrement de l'inscription
         Inscription inscription = inscriptionRepository.save(newInscription);
         return inscription;
     }

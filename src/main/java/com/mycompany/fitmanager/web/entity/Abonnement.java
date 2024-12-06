@@ -5,15 +5,19 @@ import com.mycompany.fitmanager.web.entity.enums.Statut;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.time.LocalDate;
 
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
+@Getter
+@Setter
 public class Abonnement {
-
+    // Propriétés
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "abonnement_id")
@@ -30,52 +34,13 @@ public class Abonnement {
     @Column(nullable = false)
     private Statut statutAbonnement; // Enum(Actif, Inactif)
 
-
     @ManyToOne
     @JoinColumn(name = "abonne_id")
     @JsonBackReference(value = "Abonne-abonnements")
     private Abonne abonne;
 
-    // Getters et Setters
-
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
-    }
-
-    public @NotNull LocalDate getDateDebut() {
-        return dateDebut;
-    }
-
-    public void setDateDebut(@NotNull LocalDate dateDebut) {
-        this.dateDebut = dateDebut;
-    }
-
-    public LocalDate getDateFin() {
-        return dateFin;
-    }
-
-    public void setDateFin(LocalDate dateFin) {
-        this.dateFin = dateFin;
-    }
-
-    public Abonne getAbonne() {
-        return abonne;
-    }
-
-    public void setAbonne(Abonne abonne) {
-        this.abonne = abonne;
-    }
-
-    public Statut getStatutAbonnement() {
-        return statutAbonnement;
-    }
-
-    public void setStatutAbonnement(Statut statutAbonnement) {
-        this.statutAbonnement = statutAbonnement;
-    }
-
+    @ManyToOne
+    @JoinColumn(name = "type_id")
+    @JsonBackReference(value = "Type-abonnements")
+    private TypeAbonnement type;
 }

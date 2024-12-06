@@ -22,22 +22,23 @@ public class InstructeurController {
     // POST
     @PostMapping
     public ResponseEntity<Instructeur> createInstructeur(@RequestBody Instructeur instructeur){
-        Instructeur savedInstructeur = instructeurService.createInstructeur(instructeur);
+        Instructeur savedInstructeur = instructeurService.save(instructeur);
         return new ResponseEntity<>(savedInstructeur, HttpStatus.CREATED);
     }
 
     // GET ALL
     @GetMapping
     public ResponseEntity<List<Instructeur>> getAllInstructeurs(){
-        List<Instructeur> instructeurs = instructeurService.getAllInstructeurs();
+        List<Instructeur> instructeurs = instructeurService.findAll();
         return ResponseEntity.ok(instructeurs);
     }
 
     // GET
     @GetMapping("{id}")
     public ResponseEntity<Instructeur> getInstructeurById(@PathVariable("id") Integer instructeurId){
-        Instructeur instructeur = instructeurService.getInstructeurById(instructeurId);
-        return ResponseEntity.ok(instructeur);
+        return instructeurService.findById(instructeurId)
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
     }
 
     // PUT
@@ -50,7 +51,7 @@ public class InstructeurController {
     // DELETE
     @DeleteMapping("{id}")
     public ResponseEntity<String> deleteInstructeur(@PathVariable("id") Integer instructeurId){
-        instructeurService.deleteInstructeur(instructeurId);
+        instructeurService.deleteById(instructeurId);
         return ResponseEntity.ok("Instructeur supprimé avec succès !");
     }
 }

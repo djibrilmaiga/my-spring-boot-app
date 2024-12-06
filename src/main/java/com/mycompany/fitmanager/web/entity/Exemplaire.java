@@ -6,7 +6,9 @@ import com.mycompany.fitmanager.web.entity.enums.EtatEXemplaire;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -15,8 +17,10 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
+@Getter
+@Setter
 public class Exemplaire {
-
+    // Propriétés
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "exemplaire_id")
@@ -40,57 +44,8 @@ public class Exemplaire {
     private Equipement equipement;
 
     // Contient la liste des maintenances effectuées pour un équipement
-    @OneToMany(mappedBy = "exemplaire", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "exemplaire", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
     @JsonManagedReference(value = "exemplaire-maintenances")
     private List<Maintenance> maintenances = new ArrayList<>();
 
-    // Getters et Setters
-
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
-    }
-
-    public @NotNull String getNumSerie() {
-        return numSerie;
-    }
-
-    public void setNumSerie(@NotNull String numSerie) {
-        this.numSerie = numSerie;
-    }
-
-    public @NotNull EtatEXemplaire getEtat() {
-        return etat;
-    }
-
-    public void setEtat(@NotNull EtatEXemplaire etat) {
-        this.etat = etat;
-    }
-
-    public LocalDate getDateDernierMaintenance() {
-        return dateDernierMaintenance;
-    }
-
-    public void setDateDernierMaintenance(LocalDate dateDernierMaintenance) {
-        this.dateDernierMaintenance = dateDernierMaintenance;
-    }
-
-    public Equipement getEquipement() {
-        return equipement;
-    }
-
-    public void setEquipement(Equipement equipement) {
-        this.equipement = equipement;
-    }
-
-    public List<Maintenance> getMaintenances() {
-        return maintenances;
-    }
-
-    public void setMaintenances(List<Maintenance> maintenances) {
-        this.maintenances = maintenances;
-    }
 }

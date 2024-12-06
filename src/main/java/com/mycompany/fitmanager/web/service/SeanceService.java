@@ -16,7 +16,6 @@ import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Service @Transactional @AllArgsConstructor
@@ -52,6 +51,7 @@ public class SeanceService {
     }
 
     // GET ALL
+    @Transactional(readOnly = true)
     public List<Seance> getAllSeances() {
         return seanceRepository.findAll();
     }
@@ -110,9 +110,12 @@ public class SeanceService {
 
         // Parcourir les nouvelles participations à ajouter
         for (Participation newParticipation : newSeance.getParticipations()) {
+            // Récupérer l'objet Abonné
+            Abonne abonne = abonneRepository.findById(newParticipation.getAbonne().getId())
+                    .orElseThrow(() -> new ResourceNotFoundException("Abonné Introuvable"));
             // Associer correctement la séance et l'abonné pour chaque participation
             newParticipation.setSeance(seance);
-
+            newParticipation.setAbonne(abonne);
             // Ajouter chaque participation à la liste des participations de la séance
             seance.getParticipations().add(newParticipation);
         }

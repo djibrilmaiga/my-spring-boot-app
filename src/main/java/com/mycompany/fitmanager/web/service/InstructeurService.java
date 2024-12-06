@@ -3,44 +3,36 @@ package com.mycompany.fitmanager.web.service;
 import com.mycompany.fitmanager.web.entity.Instructeur;
 import com.mycompany.fitmanager.web.exception.ResourceNotFoundException;
 import com.mycompany.fitmanager.web.repository.InstructeurRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-
 @Service
-public class InstructeurService {
+public class InstructeurService extends AgentService<Instructeur> {
 
-    @Autowired
-    private InstructeurRepository instructeurRepository;
+    private final InstructeurRepository instructeurRepository;
+
+    public InstructeurService(InstructeurRepository instructeurRepository) {
+        this.instructeurRepository = instructeurRepository;
+    }
 
     // POST
-    public Instructeur createInstructeur(Instructeur instructeur){
+    @Override
+    public Instructeur save(Instructeur instructeur) {
         return instructeurRepository.save(instructeur);
     }
-    // GET ALL
-    public List<Instructeur> getAllInstructeurs(){
-        return instructeurRepository.findAll();
-    }
-    // GET ID
-    public Instructeur getInstructeurById(Integer instructeurId){
-        return instructeurRepository.findById(instructeurId)
-                .orElseThrow(() -> new ResourceNotFoundException("Instructeur introuvable  à l'ID : " + instructeurId));
-    }
+
+
     // PUT
-    public Instructeur updateInstructeur(Integer instructeurId, Instructeur newInstructeur){
-        Instructeur instructeur = instructeurRepository.findById(instructeurId)
-                .orElseThrow(() -> new ResourceNotFoundException("Instructeur introuvable à l'Id :" + instructeurId));
+    public Instructeur updateInstructeur(Integer id, Instructeur newInstructeur) {
+        Instructeur existingInstructeur = findById(id).orElseThrow(
+                () -> new ResourceNotFoundException("Instructeur introuvable à l'ID : " + id)
+        );
 
-        instructeur.setNom(newInstructeur.getNom());
-        instructeur.setPrenom(newInstructeur.getPrenom());
-        instructeur.setTelephone(newInstructeur.getTelephone());
-        instructeur.setSpecialite(newInstructeur.getSpecialite());
+        existingInstructeur.setNom(newInstructeur.getNom());
+        existingInstructeur.setPrenom(newInstructeur.getPrenom());
+        existingInstructeur.setTelephone(newInstructeur.getTelephone());
+        existingInstructeur.setSpecialite(newInstructeur.getSpecialite());
 
-        return instructeurRepository.save(instructeur);
+        return save(existingInstructeur);
     }
-    // DELETE
-    public void deleteInstructeur(Integer instructeurId){
-        instructeurRepository.deleteById(instructeurId);
-    }
+
 }

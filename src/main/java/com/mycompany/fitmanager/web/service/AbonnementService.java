@@ -2,12 +2,15 @@ package com.mycompany.fitmanager.web.service;
 
 import com.mycompany.fitmanager.web.dto.AbonnementDTO;
 import com.mycompany.fitmanager.web.dto.AbonnementExpirationDTO;
+import com.mycompany.fitmanager.web.dto.AbonnementSuscribeDTO;
 import com.mycompany.fitmanager.web.entity.Abonne;
 import com.mycompany.fitmanager.web.entity.Abonnement;
+import com.mycompany.fitmanager.web.entity.TypeAbonnement;
 import com.mycompany.fitmanager.web.entity.enums.Statut;
 import com.mycompany.fitmanager.web.exception.ResourceNotFoundException;
 import com.mycompany.fitmanager.web.repository.AbonneRepository;
 import com.mycompany.fitmanager.web.repository.AbonnementRepository;
+import com.mycompany.fitmanager.web.repository.TypeAbonnementRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -26,8 +29,12 @@ public class AbonnementService {
     @Autowired
     private AbonneRepository abonneRepository;
 
+    @Autowired
+    private TypeAbonnementRepository typeAbonnementRepository;
+
     // POST
-    public String createAbonnement(Integer abonneId, Abonnement newAbonnement) {
+    public String createAbonnement(Integer abonneId, AbonnementSuscribeDTO newAbonnement) {
+
         // Récupérer l'abonné à partir de son ID
         Abonne abonne = abonneRepository.findById(abonneId)
                 .orElseThrow(() -> new ResourceNotFoundException("L'abonné avec l'ID " + abonneId + " n'existe pas."));
@@ -44,10 +51,30 @@ public class AbonnementService {
         }
 
         // Si aucun abonnement actif, on crée un nouvel abonnement
-        newAbonnement.setAbonne(abonne);
-        newAbonnement.setStatutAbonnement(Statut.Actif);
-        abonnementRepository.save(newAbonnement);
+        Abonnement abonnement = new Abonnement();
 
+        // Conversion du DTO en Abonnement
+        abonnement.setDateDebut(newAbonnement.getDateDebut());
+        abonnement.setDateFin(newAbonnement.getDateFin());
+        abonnement.setStatutAbonnement(Statut.valueOf(newAbonnement.getStatutAbonnement()));
+
+        // Récupérer l'ID du type d'abonnement
+        TypeAbonnement typeAbonnement = typeAbonnementRepository.findById(newAbonnement.getTypeId())
+                .orElseThrow(() -> new RuntimeException("Type d'abonnement introuvable"));
+
+        // Affecter l'objet Type Abonnement à l'Abonnement
+        abonnement.setType(typeAbonnement);
+
+        // Affecter l'objet Abonné à l'abonnement
+        abonnement.setAbonne(abonne);
+
+        // Activer le statut du nouvel Abonnement
+        abonnement.setStatutAbonnement(Statut.Actif);
+
+        // Enregistrer l'Abonnement dans la Base de données
+        abonnementRepository.save(abonnement);
+
+        // Confirmer l'enregistrement de l'abonné par du texte et passer à l'instruction suivante
         return "Nouvel abonnement créé avec succès pour l'abonné.";
     }
 

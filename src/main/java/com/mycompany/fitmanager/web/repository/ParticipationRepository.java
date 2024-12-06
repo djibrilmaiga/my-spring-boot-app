@@ -13,7 +13,4 @@ public interface ParticipationRepository extends JpaRepository<Participation, In
     @Query("SELECT new com.mycompany.fitmanager.web.dto.AbonneDTO(pt.seance.id, pt.abonne.id, a.nom, a.prenom, pt.statut) " +
             "FROM Participation pt JOIN pt.abonne a WHERE pt.seance.id = :seanceId")
     List<AbonneDTO> findBySeanceId(@Param("seanceId") Integer seanceId);
-
-
-    List<Participation> findByAbonneId(Integer abonneId);
 }

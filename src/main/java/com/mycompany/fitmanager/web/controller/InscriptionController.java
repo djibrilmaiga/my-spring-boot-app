@@ -19,9 +19,9 @@ public class InscriptionController {
     private InscriptionService inscriptionService;
 
     // POST
-    @PostMapping
-    public ResponseEntity<Inscription> createInscription(@RequestBody Inscription inscription){
-        Inscription savedInscription = inscriptionService.createInscription(inscription);
+    @PostMapping("/{userId}")
+    public ResponseEntity<Inscription> createInscription(@PathVariable("userId") Integer userId, @RequestBody Inscription inscription){
+        Inscription savedInscription = inscriptionService.createInscription(userId, inscription);
         return new ResponseEntity<>(savedInscription, HttpStatus.CREATED);
     }
 

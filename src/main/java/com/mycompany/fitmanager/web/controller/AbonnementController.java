@@ -2,6 +2,7 @@ package com.mycompany.fitmanager.web.controller;
 
 import com.mycompany.fitmanager.web.dto.AbonnementDTO;
 import com.mycompany.fitmanager.web.dto.AbonnementExpirationDTO;
+import com.mycompany.fitmanager.web.dto.AbonnementSuscribeDTO;
 import com.mycompany.fitmanager.web.entity.Abonnement;
 import com.mycompany.fitmanager.web.exception.ResourceNotFoundException;
 import com.mycompany.fitmanager.web.service.AbonnementService;
@@ -21,8 +22,8 @@ public class AbonnementController {
     private AbonnementService abonnementService;
 
     // POST
-    @PostMapping("/abonne/{id}")
-    public ResponseEntity<String> createAbonnement(@PathVariable("id") Integer abonneId,@RequestBody Abonnement newAbonnement){
+    @PostMapping("/abonne/{abonneId}")
+    public ResponseEntity<String> createAbonnement(@PathVariable("abonneId") Integer abonneId,@RequestBody AbonnementSuscribeDTO newAbonnement){
         try {
             String rs = abonnementService.createAbonnement(abonneId, newAbonnement);
             if ("L'abonné a encore un abonnement en cours.".equals(rs)) {

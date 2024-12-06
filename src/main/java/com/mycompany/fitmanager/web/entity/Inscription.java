@@ -1,5 +1,6 @@
 package com.mycompany.fitmanager.web.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
@@ -10,7 +11,10 @@ import java.math.BigDecimal;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
+@Getter
+@Setter
 public class Inscription {
+    // Propriétés
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "inscription_id")
@@ -26,36 +30,9 @@ public class Inscription {
 
     private String description;
 
-    // Getters et Setters
-    public Integer getId() {
-        return id;
-    }
+    @ManyToOne
+    @JoinColumn(name = "utilisateur_id", nullable = false)
+    @JsonBackReference(value = "User-inscriptions")
+    private Utilisateur utilisateur;
 
-    public void setId(Integer id) {
-        this.id = id;
-    }
-
-    public @NotNull String getLibelle() {
-        return libelle;
-    }
-
-    public void setLibelle(@NotNull String libelle) {
-        this.libelle = libelle;
-    }
-
-    public @NotNull BigDecimal getTarif() {
-        return tarif;
-    }
-
-    public void setTarif(@NotNull BigDecimal tarif) {
-        this.tarif = tarif;
-    }
-
-    public @NotNull String getDescription() {
-        return description;
-    }
-
-    public void setDescription(@NotNull String description) {
-        this.description = description;
-    }
 }
